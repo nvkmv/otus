@@ -1,0 +1,10 @@
+---
+# tasks file for configure_server
+- name: update system, add repositories and install packege
+  include_tasks: tasks/dnf_install.yml
+
+- name: install docker-compose
+  include_tasks: tasks/install_docker-compose.yml
+
+- name: install python3 and pip3 module
+  include_tasks: tasks/install_python3.yml

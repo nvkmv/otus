@@ -1,0 +1,68 @@
+---
+- name: Add Elasticsearch GPG key.
+  rpm_key:
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+                                   #==filebeat==#
+
+- name: install filebeat
+  ansible.builtin.dnf:
+    name: 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.17.6-x86_64.rpm'
+    state: present
+
+- name: template filebeat
+  ansible.builtin.template:
+    src: filebeat.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+
+- name: template filebeat module
+  ansible.builtin.template:
+    src: system.yml.disabled
+    dest: /etc/filebeat/modules.d/system.yml.disabled
+
+- name: enable and start filebeat
+  ansible.builtin.systemd:
+    name: filebeat
+    enabled: yes
+    state: started  
+ 
+                                      #==metricbeat==#
+
+- name: install metricbeat
+  ansible.builtin.dnf:
+    name: 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.17.6-x86_64.rpm' 
+    state: present
+
+- name: template metricbeat.yml
+  ansible.builtin.template:
+    src: metricbeat.j2
+    dest: /etc/metricbeat/metricbeat.yml
+    owner: root
+    group: root  
+
+- name: temlate module system
+  ansible.builtin.template:
+    src: metricbeat_system.yml
+    dest: /etc/metricbeat/modules.d/system.yml
+
+- name: template module docker
+  ansible.builtin.template:
+    src: docker.yml
+    dest: /etc/metricbeat/modules.d/docker.yml  
+
+- name: enable and start metricbeat
+  ansible.builtin.systemd:
+    name: metricbeat
+    enabled: yes
+    state: started
+
+                                    #==node_exporter==#
+
+- name: get node-exporter
+  ansible.builtin.unarchive:
+    src: https://github.com/prometheus/node_exporter/releases/download/v1.4.0-rc.0/node_exporter-1.4.0-rc.0.linux-amd64.tar.gz
+    dest: /home/atlas
+    remote_src: yes

@@ -1,0 +1,20 @@
+--- 
+# tasks file for dc_nginxproxy
+
+- name: create folder for docker-compose app
+  ansible.builtin.file:
+    path: /home/atlas/dc_nginxproxy
+    state: directory
+    
+
+- name: copy docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: /home/atlas/dc_nginxproxy
+
+- name: deploy project
+  community.docker.docker_compose:
+    project_src: /home/atlas/dc_nginxproxy
+    files: docker-compose.yml
+
+

@@ -1,0 +1,50 @@
+---
+- name: install iptables
+  ansible.builtin.dnf:
+    name: iptables
+    state: present
+
+- name: add repo EPEL and ELREPO
+  ansible.builtin.dnf:
+    name:
+      - epel-release
+      - elrepo-release
+    state: present    
+
+- name: install wireguard and kmode
+  ansible.builtin.dnf:
+    name:
+      - wireguard-tools
+      - kmod-wireguard
+    state: present
+
+- name: set forwarding IPv4
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: create wg-server keys
+  ansible.builtin.shell:
+    cmd: umask 077 && wg genkey | tee privatkey | wg pubkey > pubkey
+    chdir: /etc/wireguard
+    
+- name: create wg-peer1 keys
+  ansible.builtin.shell:
+    cmd: wg genkey | tee peer1privatkey | wg pubkey > peer1pubkey
+    chdir: /etc/wireguard
+
+- name: create wg-peer2 keys
+  ansible.builtin.shell:
+    cmd: wg genkey | tee peer2privatkey | wg pubkey > peer2pubkey
+    chdir: /etc/wireguard
+
+- name: temlete wg0.conf
+  ansible.builtin.template:
+    src: wg0.j2
+    dest: /etc/wireguard/wg0.conf
+    owner: root
+    group: root
+    mode: 0600  

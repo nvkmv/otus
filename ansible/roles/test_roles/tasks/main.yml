@@ -1,0 +1,13 @@
+---
+# tasks file for test_roles
+- name: bash ohmyzsh
+  ansible.builtin.shell:
+    'curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh'
+  args:
+    chdir: /home/atlas/
+
+- name: change shell
+  ansible.builtin.user:
+    user: atlas
+    shell: /bin/zsh
+

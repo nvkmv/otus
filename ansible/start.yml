@@ -1,0 +1,10 @@
+---
+- hosts: all
+  user: root
+  become: true
+  roles:
+    #- create_user
+    - configure_server
+    #- install_metrics
+    #- test_roles 
+    #- gitclone

@@ -1,0 +1,10 @@
+---
+#metric_vars
+kibana_host: 10.0.0.3
+kibana_port: 5601
+kibana_usr: elastic
+kibana_pass: elastic
+elk_host: 10.0.0.3
+elk_port: 9200
+elk_usr: elastic
+elk_pass: elastic

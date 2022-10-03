@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      - monitor_net
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    networks:
+      - monitor_net
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_etc:/etc/grafana
+      - grafana_data:/usr/share/grafana
+
+networks: 
+  monitor_net: 
+
+volumes:
+  grafana_data:
+  grafana_etc:  
+
+        

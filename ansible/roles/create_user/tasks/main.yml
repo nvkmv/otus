@@ -1,0 +1,8 @@
+---
+# tasks file for create_user
+
+- name: SELinux disable and reboot
+  include_tasks: tasks/selinux.yml
+
+- name: create users and create ssh-keys
+  include_tasks: tasks/user.yml

@@ -1,0 +1,23 @@
+---
+   #== install python3 and pip3 module ==#
+
+- name: install python3
+  ansible.builtin.dnf:
+    name: python3
+    state: present
+
+- name: Install and upgrade pip
+  pip:
+    name: pip
+    extra_args: --upgrade
+    executable: pip3
+
+- name: Install pip3 modules
+  pip:
+    name:
+      - setuptools_rust
+      - docker
+      - docker-compose
+    executable: pip3    
+    
+

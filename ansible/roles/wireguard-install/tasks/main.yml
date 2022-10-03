@@ -1,0 +1,29 @@
+---
+# tasks file for wireguard-install
+
+- name: install iptables
+  ansible.builtin.dnf:
+    name: iptables
+    state: present
+
+- name: add repo EPEL and ELREPO
+  ansible.builtin.dnf:
+    name:
+      - epel-release
+      - elrepo-release
+    state: present    
+
+- name: install wireguard and kmode
+  ansible.builtin.dnf:
+    name:
+      - wireguard-tools
+      - kmod-wireguard
+    state: present
+
+- name: copy wg config
+  ansible.builtin.templates:
+    src: wg0.j2
+    dest: /etc/wireguard/wg0.conf
+    owner: root
+    group: root
+    mode: 0599

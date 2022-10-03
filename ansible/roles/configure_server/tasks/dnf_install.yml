@@ -1,0 +1,41 @@
+---
+- name: add repo EPEL
+  ansible.builtin.dnf:
+    name:
+      - epel-release
+      - elrepo-release
+    state: present
+
+- name: add repo docker, gh,
+  ansible.builtin.shell:
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo -y
+    dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo -y 
+        
+- name: update all package
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+   
+- name: dnf install
+  ansible.builtin.dnf:
+    name:
+      - gh
+      - zsh
+      - vim
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+      - curl
+      - wget 
+      - htop
+    state: present
+
+- name: start docker
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+    state: started 
+
+        

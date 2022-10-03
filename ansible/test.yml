@@ -1,0 +1,6 @@
+---
+- hosts: all
+  user: root
+  become: true
+  roles:
+    - node_exporter

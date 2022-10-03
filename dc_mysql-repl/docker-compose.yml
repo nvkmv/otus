@@ -1,0 +1,17 @@
+version: '3.3'
+volumes: 
+  mysql_repl:
+services:
+  mysql_repl:
+    image: mysql:8    
+    container_name: repl_db
+    restart: unless-stopped
+    ports:
+      - 3306:3306        
+    environment:
+      MYSQL_ROOT_PASSWORD: db123
+      MYSQL_DATABASE: repl
+    volumes:
+      - mysql_repl:/var/lib/mysql
+      - ./mysql-config/slave.cnf:/etc/mysql/conf.d/slave.cnf
+      - ./mysql-config/slave.sql:/docker-entrypoint-initdb.d/start.sql

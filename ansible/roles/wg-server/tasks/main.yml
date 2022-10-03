@@ -1,0 +1,4 @@
+---
+# tasks file for wg-server
+- name: config wg
+  include_tasks: wireguard.yml

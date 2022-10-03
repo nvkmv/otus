@@ -1,0 +1,24 @@
+---
+- name: create new user whith password and ssh keys
+  hosts: all
+  become: true
+  
+  tasks:
+    - name: create user
+      ansible.builtin.user:
+        name: atlas
+        password: "{{ '186810' | password_hash('sha512') }}"
+        groups:
+          - wheel
+            
+        state: "present"
+        shell: "/bin/bash"
+        create_home: true
+        home: "/home/atlas"
+        generate_ssh_key: true
+      
+    - name: create authorized_keys
+      ansible.posix.authorized_key:
+        user: atlas
+        state: present
+        key: "{{ lookup('file', '/home/atlas/.ssh/id_rsa.pub') }}"
