@@ -1,6 +1,10 @@
 ---
-- hosts: all
-  user: root
+- hosts: proxy
+  user: atlas
   become: true
-  roles:
-    - node_exporter
+  tasks:
+    - name: 
+      ansible.builtin.file:
+        path: /home/atlas/sudotest2
+
+        state: touch    

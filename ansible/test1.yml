@@ -1,0 +1,11 @@
+---
+- name: dnf_update
+  hosts: cloud
+  become: true
+  #become_sudo_pass: {{ ansible_ssh_pass }} 
+  #vars_files: 
+  #  - secret
+  
+  roles:
+    - node_exporter
+
