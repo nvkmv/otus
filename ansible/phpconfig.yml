@@ -1,0 +1,8 @@
+---
+- hosts: cloud
+  become: true
+  become_user: root 
+  roles:
+    - phpconfig
+      #- backupmysql
+

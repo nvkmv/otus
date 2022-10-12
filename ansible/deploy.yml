@@ -1,6 +1,0 @@
----
-- hosts: all
-  user: root
-  become: true
-  roles:
-    - dc_nginxproxy

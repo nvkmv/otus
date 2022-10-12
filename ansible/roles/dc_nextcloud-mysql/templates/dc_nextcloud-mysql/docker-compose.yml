@@ -1,0 +1,31 @@
+version: '3.3'
+volumes:
+  nc_db:             
+services:
+  nextcloud:
+    container_name: nc
+    restart: unless-stopped
+    image: nextcloud
+    ports:
+      - 80:80
+    volumes:
+      - /nc/app/apps:/var/www/html/apps
+      - /nc_app/config:/var/www/html/config
+      - /nc_app/data:/var/www/html/data
+    depends_on:
+      - db
+  db:
+    container_name: nc_db
+    restart: unless-stopped
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: db123
+      MYSQL_DATABASE: ncdb
+    volumes:
+      - nc_db:/var/lib/mysql
+      - ./mysql-config/master.cnf:/etc/mysql/conf.d/repl.cnf
+      - ./mysql-config/master.sql:/docker-entrypoint-initdb.d/start.sql
+        
+
