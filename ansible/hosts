@@ -2,5 +2,5 @@
 159.65.196.4 ansible_ssh_user=root 
 
 [cloud]
-192.168.1.6 ansible_ssh_user=atlas ansible_ssh_port=226 ansible_become_user=atlas
+192.168.1.6 ansible_ssh_user=atlas ansible_ssh_port=226 ansible_become_user=root
 
