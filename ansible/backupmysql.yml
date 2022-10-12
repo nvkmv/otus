@@ -1,8 +1,7 @@
 ---
 - hosts: cloud
   become: true
-  become_user: atlas
+  become_user: root
   roles:
-    
     - backupmysql
 
