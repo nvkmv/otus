@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker exec nc_db mysqldump -uroot -pdb123 ncdb \
+| ssh atlas@192.168.1.2 -p 2255 "gzip > /home/atlas/otus/dc_mysql-repl/backup/$(date +%F-%T)_ncdb.sql.gz"
+

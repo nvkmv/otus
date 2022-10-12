@@ -2,7 +2,7 @@
 - name: create user
   ansible.builtin.user:
     name: atlas
-    password: "{{ '186810' | password_hash('sha512') }}"
+    password: "{{ ansible_sudo_pass | password_hash('sha512') }}"
     groups:
       - wheel
             

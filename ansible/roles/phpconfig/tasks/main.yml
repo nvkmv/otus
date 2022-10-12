@@ -1,0 +1,8 @@
+---
+# tasks file for phpconfig
+
+- name: template config.php to nextcloud
+  ansible.builtin.template:
+    src: config.j2
+    dest: /nc_app/config/
+    mode: 0644

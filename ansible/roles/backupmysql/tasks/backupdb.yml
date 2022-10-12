@@ -1,0 +1,24 @@
+---
+- name: create directory
+  ansible.builtin.file:
+    path: /opt/backupdb
+    state: directory
+    owner: root
+    group: root
+    mode: 0755 
+
+
+- name: template script
+  ansible.builtin.template:
+    src: backupdb.j2
+    dest: /opt/backupdb/backupdb
+    owner: root
+    group: root
+    mode: 0755
+    
+
+- name: add script to crontab
+  ansible.builtin.cron:
+    name: backup
+    minute: "*/1"
+    job: /opt/backupdb/backupdb

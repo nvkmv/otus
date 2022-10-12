@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: proxy
   user: root
   become: true
   roles:
@@ -7,6 +7,10 @@
     - configure_server
     - install_metrics
     - node_exporter
-    - test_roles
     - dc_nginxproxy
-      #- gitclone
+ 
+- hosts: cloud
+  become_user: atlas
+  roles:
+    - dc_nextcloud-mysql
+ 

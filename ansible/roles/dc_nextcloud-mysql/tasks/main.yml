@@ -1,0 +1,41 @@
+---
+# tasks file for dc_nextcloud-mysql
+
+
+- name: create project folder
+  ansible.builtin.file:
+    path: /home/atlas/dc_nextcloud-mysql
+    state: directory
+
+
+- name: create project folder
+  ansible.builtin.file:
+    path: /home/atlas/dc_nextcloud-mysql/mysql-config
+    state: directory
+    
+- name: template project file 
+  ansible.builtin.template:
+    src: dc_nextcloud-mysql/docker-compose.yml 
+    dest: /home/atlas/dc_nextcloud-mysql
+
+- name: template project file 
+  ansible.builtin.template:
+    src: dc_nextcloud-mysql/mysql-config/master.cnf
+    dest: /home/atlas/dc_nextcloud-mysql/mysql-config/
+
+- name: template project file 
+  ansible.builtin.template:
+    src: dc_nextcloud-mysql/mysql-config/master.sql 
+    dest: /home/atlas/dc_nextcloud-mysql/mysql-config
+
+- name: template project file 
+  ansible.builtin.template:
+    src: dc_nextcloud-mysql/README.md 
+    dest: /home/atlas/dc_nextcloud-mysql  
+
+- name: docker-compose deploy
+  community.docker.docker_compose:
+    project_src: /home/atlas/dc_nextcloud-mysql
+    files: docker-compose.yml
+
+
