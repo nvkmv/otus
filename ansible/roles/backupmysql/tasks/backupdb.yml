@@ -12,8 +12,8 @@
   ansible.builtin.template:
     src: backupdb.j2
     dest: /opt/backupdb/backupdb
-    owner: root
-    group: root
+    owner: atlas
+    group: atlas
     mode: 0755
     
 
@@ -22,3 +22,4 @@
     name: backup
     minute: "*/1"
     job: /opt/backupdb/backupdb
+  become: no  
