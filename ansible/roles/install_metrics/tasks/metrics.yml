@@ -21,7 +21,7 @@
 - name: template filebeat module
   ansible.builtin.template:
     src: system.yml.disabled
-    dest: /etc/filebeat/modules.d/system.yml.disabled
+    dest: /etc/filebeat/modules.d/system.yml
 
 - name: enable and start filebeat
   ansible.builtin.systemd:
