@@ -13,4 +13,6 @@
   become_user: atlas
   roles:
     - dc_nextcloud-mysql
+    - install_metrics
+           
  
