@@ -12,7 +12,8 @@
 - hosts: cloud
   become_user: atlas
   roles:
-    - dc_nextcloud-mysql
     - install_metrics
-           
+    - node_exporter          
+    - dc_nextcloud-mysql
+    
  
