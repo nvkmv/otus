@@ -10,6 +10,7 @@
   ansible.builtin.dnf:
     name: 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.17.6-x86_64.rpm'
     state: present
+  become: yes  
 
 - name: template filebeat
   ansible.builtin.template:
@@ -17,17 +18,24 @@
     dest: /etc/filebeat/filebeat.yml
     owner: root
     group: root
+  become: yes  
 
 - name: template filebeat module
   ansible.builtin.template:
     src: system.yml.disabled
     dest: /etc/filebeat/modules.d/system.yml
+  become: yes
+
+- name: filebeat setup
+  command: filebeat setup -e
+  become: yes
 
 - name: enable and start filebeat
-  ansible.builtin.systemd:
+  service:
     name: filebeat
     enabled: yes
-    state: started  
+    state: started
+  become: yes  
  
                                       #==metricbeat==#
 
@@ -35,28 +43,36 @@
   ansible.builtin.dnf:
     name: 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.17.6-x86_64.rpm' 
     state: present
+  become: yes  
 
 - name: template metricbeat.yml
   ansible.builtin.template:
     src: metricbeat.j2
     dest: /etc/metricbeat/metricbeat.yml
     owner: root
-    group: root  
+    group: root
+  become: yes  
 
 - name: temlate module system
   ansible.builtin.template:
     src: metricbeat_system.yml
     dest: /etc/metricbeat/modules.d/system.yml
+  become: yes
 
 - name: template module docker
   ansible.builtin.template:
     src: docker.yml
     dest: /etc/metricbeat/modules.d/docker.yml  
+  become: yes
+
+- name: metricbeat setup
+  command: metricbeat setup -e
+  become: yes
 
 - name: enable and start metricbeat
-  ansible.builtin.systemd:
+  service:
     name: metricbeat
     enabled: yes
     state: started
-
+  become: yes
                   

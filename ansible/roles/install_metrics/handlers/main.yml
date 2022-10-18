@@ -1,14 +1,12 @@
 ---
 # handlers file for install_metrics
 
-- name: start filebeat
-  ansible.builtin.systemd:
+- name: restart filebeat
+  service:
     name: filebeat
-    enable: yes
-    state: started
+    state: restarted
 
-- name: start etricbeat
-  ansible.builtin.systemd:
+- name: restart etricbeat
+  service:
     name: metricbeat
-    enable: yes
-    state: started  
+    state: restarted  
