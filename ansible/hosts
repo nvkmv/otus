@@ -1,6 +1,6 @@
 [proxy]
-159.65.196.4 ansible_ssh_user=root 
+159.65.196.4  
 
 [cloud]
-192.168.1.6 ansible_ssh_user=atlas ansible_ssh_port=226 ansible_become_user=root
+192.168.1.6 
 
