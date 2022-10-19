@@ -1,6 +1,6 @@
  Описание:
  
-## сервис с облаком Nextcloud, базой данных MYSQL и ее backup, доступом по доменному имени (Nginx Proxy Manager, https connect)+VPN (Wireguard) и мониторинг серверов с помощию Grafana/Prometheus и ELK stack
+## сервис с облаком Nextcloud, базой данных MYSQL, ее backup и репликация, доступом по доменному имени (Nginx Proxy Manager, https connect)+VPN (Wireguard) и мониторинг серверов с помощию Grafana/Prometheus и ELK stack
 ## настройка серверов и запуск  приложений в Docker контейнерах автоматизировано при помощи Ansible
 ### пароли и переменные хранятся в зашифрованом файле
 ### проект размещен на трех серверах c установленными и настроенными приложениями и сервисами:
