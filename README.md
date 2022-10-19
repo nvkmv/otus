@@ -1,6 +1,6 @@
  Описание:
  
-## сервис с облаком Nextcloud, базой данных MYSQL и ее backup, доступом по domain name (Nginx Proxy Manager, https connect)+VPN (Wireguard) и мониторинг этого с помощию Grafna/Prometheus и ELK stack
+## сервис с облаком Nextcloud, базой данных MYSQL и ее backup, доступом по доменному имени (Nginx Proxy Manager, https connect)+VPN (Wireguard) и мониторинг серверов с помощию Grafana/Prometheus и ELK stack
 ## настройка серверов и запуск  приложений в Docker контейнерах автоматизировано при помощи Ansible
 ### пароли и переменные хранятся в зашифрованом файле
 ### проект размещен на трех серверах c установленными и настроенными приложениями и сервисами:
@@ -24,7 +24,15 @@
      - backup and replication MYSQL detabase (docker-compose)
 
 ## пошаговое руководство :
-### настройка сети VPN (если ваши компьютеры в одной сети - пропустите этот шаг)
+     1. настройка сети
+     2. запуск контейнеров с ELK и Grafana/Prometheus 
+     3. запуск автоматизации настройки серверов
+     4. настройка сервисов в браузере
+     5. конфигурация приложения Nextcloud
+     6. запуск автоматизации создания бэкапов
+     7. запуск контейнера с БД MYSQL для репликации
+     
+### настройка сети VPN 
 1. Зайдите в папку ansible и выполните команду:
 
 ```
@@ -48,6 +56,11 @@ systemctl enable --now wg-quick@wg0
 4. настройте клиенты сети cloud и monitor редактируя файл wg0.conf на них (должен быть установлен Wireguard)
 5. проверьте работу сети c клиентов командой ``` ping 10.0.0.1 ```
 
+## Запуск контейнеров с ELK и Grafana/Prometheus:
+  в каталогах dc_elk и dc_prometheud-grafana выполните команду:
+  
+  ``` docker-compose up -d ```
+
 ### Запуск настройки серверов и приложений
 1. впишите в файл hosts ip адреса ваших серверов в соответствии их назначений
 2. в файле ansible/group_vars/all поменяйте значения переменных, по умолчанию они такие:
@@ -61,7 +74,8 @@ systemctl enable --now wg-quick@wg0
    - elk_usr: elastic
    - elk_pass: elastic
 
-3. выполните команду запуска автоматизации:
+3. выполните команду запуска автоматизации настройки серверов:
+
 4. ``` ansible-playbook start.yml --ask-vault-pass ```
    ## при этом действии будет выполненно:
    ## на сервере proxy:
@@ -102,3 +116,33 @@ systemctl enable --now wg-quick@wg0
  ### пример конфига:
  
  ![Screenshot_20221014_161621](https://user-images.githubusercontent.com/59445051/195857635-619135b9-c190-41ab-8bfc-aed4ece3fc75.png)
+ 
+### проверьте работу перейдя по адресу вашего доменого имени
+
+## Запуск автоматизации бэкапа
+
+### убедитесь что путь для сохраниения архивов указаный в ansible/roles/backupmysql/templates/backupdb.j2 и данные для авторизации по ssh соответсвует вашим 
+
+### в каталоге ansible выполните команду:
+
+``` ansible-playbook backupmysql.yml --ask-vault ```
+    
+### все бекапы будут сохранятся в каталог otus/dc_mysql-repl/backup/
+
+## Запуск контейнера с БД MYSQL  для репликации:
+   
+   в каталоге dc_mysql-repl выполните команду: ``` docker-compose up -d ```
+   
+   для просмотра статуса репликации выполните:
+   
+   ``` docker exec -it repl_db mysql -uroot -p -e "show slave status\G;" ```
+   
+   ввидете пароль от БД
+   
+ ### для запуска БД из дампа в каталоге dc_mysql-repl/backup выполните:
+ 
+ ``` docker exec -it mysql -uroot -pdb123 ncdb < namedump.sql ``` (предварительно его распаковав)
+
+
+
+
