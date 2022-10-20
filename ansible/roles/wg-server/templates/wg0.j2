@@ -1,15 +1,15 @@
  
 [Interface] # proxy_host
-PrivateKey = 
+PrivateKey =
 Address = 10.0.0.1/24
 ListenPort = 51820
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
-[Peer] # app_host
+[Peer] # cloud
 PublicKey = 
 AllowedIPs = 10.0.0.2/32
 
-[Peer] # monitor_host
+[Peer] # monitor
 PublicKey = 
 AllowedIPs = 10.0.0.3/32

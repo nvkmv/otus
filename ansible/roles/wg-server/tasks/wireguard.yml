@@ -28,17 +28,18 @@
 
 - name: create wg-server keys
   ansible.builtin.shell:
-    cmd: umask 077 && wg genkey | tee privatkey | wg pubkey > pubkey
+    cmd: umask 077 && wg genkey | tee privatekey | wg pubkey > pubkey
     chdir: /etc/wireguard
     
 - name: create wg-peer1 keys
   ansible.builtin.shell:
-    cmd: wg genkey | tee peer1privatkey | wg pubkey > peer1pubkey
+    cmd: umask 077 && wg genkey | tee cloudpriv | wg pubkey > cloudpub
     chdir: /etc/wireguard
+  
 
 - name: create wg-peer2 keys
   ansible.builtin.shell:
-    cmd: wg genkey | tee peer2privatkey | wg pubkey > peer2pubkey
+    cmd: umask 077 && wg genkey | tee monitorpriv | wg pubkey > monitorpub
     chdir: /etc/wireguard
 
 - name: temlete wg0.conf
@@ -47,4 +48,19 @@
     dest: /etc/wireguard/wg0.conf
     owner: root
     group: root
-    mode: 0600  
+    mode: 0600 
+
+- name: add keys
+  shell: 
+    cmd: sed -i "s/PrivateKey =/PrivateKey = $(cat privatekey)/" wg0.conf  
+    chdir: /etc/wireguard/
+
+- name: add keys
+  shell: 
+    cmd: sed -i "10 s/PublicKey =/PublicKey = $(cat cloudpub)/" wg0.conf  
+    chdir: /etc/wireguard/
+
+- name: add keys
+  shell:
+    cmd: sed -i "14 s/PublicKey = /PublicKey = $(cat monitorpub)/" wg0.conf
+    chdir: /etc/wireguard/    

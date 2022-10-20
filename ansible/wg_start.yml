@@ -1,5 +1,5 @@
 ---
-- hosts: proxy
+- hosts: test
   user: root
   become: true
   roles:
