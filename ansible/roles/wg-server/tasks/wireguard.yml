@@ -84,4 +84,4 @@
     var: cloudpriv.stdout
 
 - debug:    
-    var: monotorpriv.stdout
+    var: monitorpriv.stdout
