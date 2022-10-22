@@ -42,22 +42,17 @@
     cmd: umask 077 && wg genkey | tee monitorpriv | wg pubkey > monitorpub
     chdir: /etc/wireguard
 
-- name: temlete wg0.conf
-  ansible.builtin.template:
-    src: wg0.j2
-    dest: /etc/wireguard/wg0.conf
+- name: copy wg0.conf
+  ansible.builtin.copy:
+    src: wg0.conf
+    dest: /etc/wireguard/
     owner: root
     group: root
-    mode: 0600 
-
-- name: cat privkey
-  shell:
-    cmd: cat /etc/wireguard/monitorpriv
-  register: stdout 
+    mode: 0600  
 
 - name: add keys
   shell: 
-    cmd: sed -i "s/PrivateKey = /PrivateKey = $(cat privatekey)/" wg0.conf  
+    cmd: sed -i "s/PrivateKey =/PrivateKey = $(cat privatekey)/" wg0.conf  
     chdir: /etc/wireguard/
 
 - name: add keys
@@ -67,6 +62,26 @@
 
 - name: add keys
   shell:
-    cmd: sed -i "14 s/PublicKey = /PublicKey = $(cat monitorpub)/" wg0.conf
+    cmd: sed -i "14 s/PublicKey =/PublicKey = $(cat monitorpub)/" wg0.conf
     chdir: /etc/wireguard/
 
+- name: show pubkey
+  shell: cat /etc/wireguard/pubkey
+  register: pubkey
+
+- name: show cloud privkey
+  shell: cat /etc/wireguard/cloudpriv
+  register: cloudpriv
+
+- name: show monitorpiv
+  shell: cat /etc/wireguard/monitorpriv
+  register: monitorpriv
+
+- debug: 
+    var: pubkey.stdout
+      
+- debug:
+    var: cloudpriv.stdout
+
+- debug:    
+    var: monotorpriv.stdout
